@@ -5,9 +5,10 @@ import (
 )
 
 const (
-	SID_NAME_CREATOR_OWNER = "S-1-3-0"
-	SID_NAME_CREATOR_GROUP = "S-1-3-1"
-	SID_NAME_EVERYONE      = "S-1-1-0"
+	SID_NAME_CREATOR_OWNER       = "S-1-3-0"
+	SID_NAME_CREATOR_GROUP       = "S-1-3-1"
+	SID_NAME_EVERYONE            = "S-1-1-0"
+	SID_NAME_AUTHENTICATED_USERS = "S-1-5-11"
 )
 
 // access mask constants from https://docs.microsoft.com/en-us/windows/desktop/wmisdk/file-and-directory-access-rights-constants
