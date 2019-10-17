@@ -85,20 +85,13 @@ func GetExplicitFileAccessMode(name string) (os.FileMode, error) {
 	}
 	defer windows.LocalFree(secDesc)
 
-	ownerName, err := owner.String()
-	if err != nil {
-		return os.FileMode(0), err
-	}
-
-	groupName, err := group.String()
-	if err != nil {
-		return os.FileMode(0), err
-	}
-
 	entries, err := api.GetExplicitEntriesFromAcl(oldAcl)
 	if err != nil {
 		return os.FileMode(0), err
 	}
+
+	ownerName := owner.String()
+	groupName := group.String()
 
 	var mode uint32
 	if len(entries) > 0 {
@@ -106,12 +99,7 @@ func GetExplicitFileAccessMode(name string) (os.FileMode, error) {
 			if item.AccessMode == api.GRANT_ACCESS && item.Trustee.TrusteeForm == api.TRUSTEE_IS_SID {
 				trustee := (*windows.SID)(unsafe.Pointer(item.Trustee.Name))
 
-				name, err := trustee.String()
-				if err != nil {
-					continue
-				}
-
-				switch name {
+				switch trustee.String() {
 				case ownerName:
 					mode |= (getFileAccessModeForRights(item.AccessPermissions) << 6)
 				case groupName:
@@ -153,20 +141,13 @@ func GetExplicitRegKeyAccessMode(name string) (os.FileMode, error) {
 	}
 	defer windows.LocalFree(secDesc)
 
-	ownerName, err := owner.String()
-	if err != nil {
-		return os.FileMode(0), err
-	}
-
-	groupName, err := group.String()
-	if err != nil {
-		return os.FileMode(0), err
-	}
-
 	entries, err := api.GetExplicitEntriesFromAcl(oldAcl)
 	if err != nil {
 		return os.FileMode(0), err
 	}
+
+	ownerName := owner.String()
+	groupName := group.String()
 
 	var mode uint32
 	if len(entries) > 0 {
@@ -174,12 +155,7 @@ func GetExplicitRegKeyAccessMode(name string) (os.FileMode, error) {
 			if item.AccessMode == api.GRANT_ACCESS && item.Trustee.TrusteeForm == api.TRUSTEE_IS_SID {
 				trustee := (*windows.SID)(unsafe.Pointer(item.Trustee.Name))
 
-				name, err := trustee.String()
-				if err != nil {
-					continue
-				}
-
-				switch name {
+				switch trustee.String() {
 				case ownerName:
 					mode |= (getRegKeyAccessModeForRights(item.AccessPermissions) << 6)
 				case groupName:
